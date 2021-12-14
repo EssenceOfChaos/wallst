@@ -1,5 +1,6 @@
-import Config config :wallst,
+import Config
+config :wallst,
   application_name: "WallST",
   author: "Frederick John"
 
-import_config "#{Mix.env().exs}"
+  import_config "#{Mix.env()}.exs"

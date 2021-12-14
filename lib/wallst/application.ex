@@ -9,7 +9,7 @@ defmodule Wallst.Application do
   def start(_type, _args) do
     children = [
       # Starts a worker by calling: Wallst.Worker.start_link(arg)
-      # {Wallst.Worker, arg}
+      {Wallst.Api.StockServer, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

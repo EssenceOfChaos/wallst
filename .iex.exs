@@ -1,0 +1,1 @@
+alias Wallst.Api.StockServer

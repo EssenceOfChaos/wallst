@@ -19,3 +19,5 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/wallst>.
 
+<!-- StockServer.get_price(:iex_server, "ibm") -->
+<!-- StockServer.get_state(:iex_server) -->

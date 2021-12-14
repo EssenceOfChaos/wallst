@@ -1,1 +1,2 @@
-import Config config :wallst, env: "prod"
+import Config
+config :wallst, env: "prod"
