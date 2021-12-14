@@ -3,12 +3,15 @@ defmodule Wallst.Api.StockServer do
     Defines the Wallst API for retreiving market and stock data
   """
   use GenServer
-
+  require Logger
+  ## Module Attributes ##
   @base "https://sandbox.iexapis.com/"
   @version "stable"
-  @req_type "/stock/{SYMBOL}/quote?"
-  @test_token "token=Tpk_e370cc9230a611e9958142010a80043c"
-  # @url "https://sandbox.iexapis.com/stable/stock/{SYMBOL}/quote?token=Tpk_e370cc9230a611e9958142010a80043c"
+  @test_token "Tpk_e370cc9230a611e9958142010a80043c"
+  @path "/tops?token="
+  @ticker "&symbols={SYMBOL}"
+  # https://sandbox.iexapis.com/stable/tops?token=Tpk_e370cc9230a611e9958142010a80043c&symbols=aapl
+  # https://sandbox.iexapis.com/stable/tops?token=Tpk_e370cc9230a611e9958142010a80043c&symbols=appl
 
   ## ------------------------------------------------- ##
   ##                   Client API                      ##
@@ -39,6 +42,7 @@ defmodule Wallst.Api.StockServer do
 
   @impl true
   def init(:ok) do
+    Logger.info("#{__MODULE__} is starting...")
     {:ok, %{}}
   end
 
@@ -50,6 +54,7 @@ defmodule Wallst.Api.StockServer do
         {:reply, "#{price}", new_state}
 
       _ ->
+        Logger.error("The price could not be found at this time.")
         {:reply, :error, state}
     end
   end
@@ -91,9 +96,9 @@ defmodule Wallst.Api.StockServer do
   ## ------------------------------------------------- ##
 
   defp price_of(stock) do
-    uri = String.replace(@req_type, "{SYMBOL}", stock)
+    uri = String.replace(@ticker, "{SYMBOL}", stock)
 
-    case HTTPoison.get(@base <> @version <> uri <> @test_token) do
+    case HTTPoison.get(@base <> @version <> @path <> @test_token <> uri) do
       {:ok, %{status_code: 200, body: body}} -> process_response(body)
       # 404 Not Found Error
       {:ok, %{status_code: 404}} -> "Not found"
@@ -101,14 +106,38 @@ defmodule Wallst.Api.StockServer do
     end
   end
 
+  # process_response
+  # Response from iex Cloud looks like:
+  # [
+  # %{
+  #   "askPrice" => 993,
+  #   "askSize" => 105,
+  #   "bidPrice" => 978.9,
+  #   "bidSize" => 203,
+  #   "lastSalePrice" => 950.87,
+  #   "lastSaleSize" => 10,
+  #   "lastSaleTime" => 1678645142122,
+  #   "lastUpdated" => 1719120303190,
+  #   "sector" => "obalcrdsumeusren",
+  #   "securityType" => "cs",
+  #   "symbol" => "TSLA",
+  #   "volume" => 397629
+  # }
+  # ]
+  # For now, we are just grabbing the lastSalePrice value
+
   defp process_response(body) do
-    # process the response from HTTPoisen.get
+    Logger.info("inside process_response")
+
     body
     |> Jason.decode!()
-    |> IO.inspect()
+    |> hd()
+    |> Map.fetch("lastSalePrice")
   end
 
   defp update_state(old_state, stock, price) do
+    Logger.info("update state")
+
     case Map.has_key?(old_state, stock) do
       true ->
         Map.update!(old_state, stock, price)

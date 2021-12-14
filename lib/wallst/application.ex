@@ -4,9 +4,18 @@ defmodule Wallst.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   @impl true
   def start(_type, _args) do
+    app = System.get_env("APP")
+
+    if app == nil do
+      Logger.info("Starting app...")
+    else
+      Logger.info("Starting #{app}...")
+    end
+
     children = [
       # Starts a worker by calling: Wallst.Worker.start_link(arg)
       {Wallst.Api.StockServer, []}

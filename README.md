@@ -19,5 +19,18 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/wallst>.
 
-<!-- StockServer.get_price(:iex_server, "ibm") -->
-<!-- StockServer.get_state(:iex_server) -->
+## Example
+
+Get some stock prices by calling the `StockServer.get_price/2` function.
+
+```shell
+StockServer.get_price(:iex_server, "ibm")
+StockServer.get_price(:iex_server, "tsla")
+StockServer.get_price(:iex_server, "aapl")
+```
+
+After making some calls, check the current state of the application using `StockServer.get_state/1`.
+
+```shell
+StockServer.get_state(:iex_server)
+```
