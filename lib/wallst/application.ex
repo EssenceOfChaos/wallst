@@ -8,17 +8,18 @@ defmodule Wallst.Application do
 
   @impl true
   def start(_type, _args) do
-    app = System.get_env("APP")
+    # example getting vars from environment
+    name = System.get_env("NAME")
 
-    if app == nil do
-      Logger.info("Starting app...")
-    else
-      Logger.info("Starting #{app}...")
-    end
+    # example getting vars from application
+    author = Application.fetch_env!(:wallst, :author)
+
+    Logger.info("#{name} developed by #{author}")
 
     children = [
       # Starts a worker by calling: Wallst.Worker.start_link(arg)
-      {Wallst.Api.StockServer, []}
+      {Wallst.Api.StockServer, []},
+      {Plug.Cowboy, scheme: :http, plug: Wallst.Router, options: [port: cowboy_port()]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -26,4 +27,6 @@ defmodule Wallst.Application do
     opts = [strategy: :one_for_one, name: Wallst.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  defp cowboy_port, do: Application.get_env(:example, :cowboy_port, 8080)
 end

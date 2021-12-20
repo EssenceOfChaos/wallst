@@ -97,6 +97,8 @@ defmodule Wallst.Api.StockServer do
 
   defp price_of(stock) do
     uri = String.replace(@ticker, "{SYMBOL}", stock)
+    Logger.info(uri)
+    Logger.info(@base <> @version <> @path <> @test_token <> uri)
 
     case HTTPoison.get(@base <> @version <> @path <> @test_token <> uri) do
       {:ok, %{status_code: 200, body: body}} -> process_response(body)
@@ -128,6 +130,7 @@ defmodule Wallst.Api.StockServer do
 
   defp process_response(body) do
     Logger.info("inside process_response")
+    Logger.info(body)
 
     body
     |> Jason.decode!()
