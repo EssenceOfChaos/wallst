@@ -2,6 +2,8 @@
 
 API for getting stock and crypto data
 
+[![CircleCI](https://circleci.com/gh/EssenceOfChaos/wallst/tree/master.svg?style=svg)](https://circleci.com/gh/EssenceOfChaos/wallst/tree/master)
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
