@@ -39,9 +39,6 @@ defmodule Wallst.Api.Market do
   end
 
   defp process_response(body) do
-    Logger.info("inside process_response")
-    Logger.info(body)
-
     body
     |> Jason.decode!()
   end

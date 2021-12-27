@@ -21,16 +21,14 @@ be found at <https://hexdocs.pm/wallst>.
 
 ## Example
 
-Get some stock prices by calling the `StockServer.get_price/2` function.
+To run the app locally install the dependencies by running `mix deps.get` in the root directory.
+Start a development mix server with `iex -S mix`, then begin by calling the `get_price/1` function in the **Market** module, passing in the ticker of the stock you are interested in.
 
 ```shell
-StockServer.get_price(:iex_server, "ibm")
-StockServer.get_price(:iex_server, "tsla")
-StockServer.get_price(:iex_server, "aapl")
-```
-
-After making some calls, check the current state of the application using `StockServer.get_state/1`.
-
-```shell
-StockServer.get_state(:iex_server)
+iex(2)> Market.get_price("ibm")
+136.53
+iex(3)> Market.get_price("tsla")
+1102.06
+iex(4)> Market.get_price("iipr")
+261.65
 ```
